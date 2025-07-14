@@ -4,13 +4,14 @@ const bcrypt = require('bcrypt');
 const jsonToken = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const userRouter = require('./routes/userRoutes');
+const preferenceRouter = require('./routes/preferenceRoutes');
 const app = express();
 const port = 3000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/users", userRouter);
-
+app.use("/userPreference",preferenceRouter);
 mongoose.connect(process.env.MONGODB_URI)
 .then(()=> {
     console.log("connected to Atlas");

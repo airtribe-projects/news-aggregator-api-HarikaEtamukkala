@@ -62,6 +62,7 @@ async function loginUser(req, res) {
     const { email, password } = req.body;
     console.log("email", email);
     const dbUser = await UserModel.findOne({ email: email });
+    console.log("dbuser",dbUser);
     if (!dbUser) {
         return res.status(401).send({ text: "Invalid email" });
     }
@@ -76,6 +77,7 @@ async function loginUser(req, res) {
         return res.status(401).send({ text: "Invalid password" });
     }
     const resUser = {
+        id:dbUser._id,
         name: dbUser.name,
         email: dbUser.email
 
