@@ -4,13 +4,20 @@ const userSchema = new mongoose.Schema({
     name: { type: String, required: true },
     email: {
         type: String,
-        min: [6, 'Email must be at least 6 characters'],
-        max: [50, 'Email must be at most 50 characters'],
+        validate: {
+            validator: function(v) {
+                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+            },
+            message: props => `${props.value} is not a valid email!`
+        },
         required: [true, 'Email is required'],
         unique: true,
     },
     password: { type: String, required: true },
-    preferences: { type: mongoose.Schema.Types.ObjectId, ref: 'Preferences' }
+    preferences: {
+        categories: [String],
+        sources: [String]
+      }
 
 })
 

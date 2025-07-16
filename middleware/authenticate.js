@@ -8,11 +8,12 @@ async function authenticate(req, res, next) {
         return res.status(401).json({ message: 'Access denied. No token provided.' });
     }
     try {
-        console.log("token",token);
+        
         const decodedToken = jwt.verify(token, JWT_SECRET);
-        console.log("decoded token",decodedToken);
+       
         req.user = decodedToken;
-        const user = await User.findById(req.user.id);
+        const user = await User.findById(req.user.id).select('preferences _id name email');
+        
         if (!user) return res.status(404).json({ message: 'User not found.' });
         req.userDetails = user;
         next();

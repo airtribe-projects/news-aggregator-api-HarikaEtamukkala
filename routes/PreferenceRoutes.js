@@ -1,8 +1,10 @@
-const express = require('express');
+ const express = require('express');
 const preferenceRouter = express.Router();
 const { preferences,updatePreferences } = require('../controllers/preferenceController');
-const authenticate = require('../middleware/authenticate');
+const authenticate = require('../middleware/auth');
 
-preferenceRouter.get("/preferences",authenticate,preferences);
-preferenceRouter.put("/preferences",authenticate,updatePreferences);
-module.exports= preferenceRouter;
+preferenceRouter.get("/",authenticate,preferences);
+preferenceRouter.put("/",authenticate,updatePreferences);
+
+
+module.exports= preferenceRouter; 
