@@ -3,15 +3,17 @@ const supertest = require('supertest');
 const sinon = require('sinon');
 const app = require('../app');
 const server = supertest(app);
-const user = require('../models/User');
+const user = require('../models/user');
 const bcrypt = require('bcrypt');
 const userController = require('../controllers/userController');
 const axios = require('axios');
+const { readArticle } = require('../controllers/newsController');
 const mockUser = {
     name: 'Clark Kent',
     email: 'clark@superman.com',
     password: 'Krypt()n8',
-    preferences: ['movies', 'comics']
+    preferences: ['movies', 'comics'],
+    readArticles: ['12','11']
 };
 
 let token = '';
@@ -23,6 +25,9 @@ tap.beforeEach(() => {
     sinon.stub(user, 'findOne').resolves(mockUser); // Mock the findOne method
     sinon.stub(axios, 'get').resolves({ data: { articles: [{ title: 'Mock News' }] } });
     sinon.stub(user, 'findById').resolves(mockUser);
+    sinon.stub(user.prototype, 'save').resolves(mockUser); 
+
+   
 });
 
 tap.afterEach(() => {
@@ -115,6 +120,12 @@ tap.test('GET /news without token', async (t) => {
     t.end();
 });
 
+tap.test('POST /news/:id/read', async (t) => {
+    const response = await server.post('/news/123/read').set('Authorization', `Bearer ${token}`);
+    t.equal(response.status, 200);
+    t.match(response.body.message, /Article 123 marked as read/);
+    t.end();
+});
 
 
 tap.teardown(() => {

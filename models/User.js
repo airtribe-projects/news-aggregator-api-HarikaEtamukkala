@@ -17,7 +17,8 @@ const userSchema = new mongoose.Schema({
     preferences: {
         categories: [String],
         sources: [String]
-      }
+      },
+      readArticles: [{ type: String }], 
 
 })
 
