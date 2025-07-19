@@ -33,7 +33,8 @@ async function fetchNews(req, res) {
             }
           
     });
-        return response.data.articles;
+   
+        res.status(200).json(response.data.articles) ;
        
     } catch (error) {
         console.error('Error fetching news:', error.message);
