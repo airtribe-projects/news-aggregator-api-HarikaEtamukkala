@@ -10,6 +10,8 @@
     "author": "Airtribe",
     "license": "ISC",
     "devDependencies": {
+        "jest": "^30.0.4",
+        "sinon": "^21.0.0",
         "supertest": "^6.3.4",
         "tap": "^18.8.0"
     },

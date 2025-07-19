@@ -7,6 +7,9 @@ const saltRounds = 10;
 async function registerUser(req, res) {
     try {
         const { name, email, password } = req.body;
+        if (!email) {
+            return res.status(400).json({ message: 'Email is required' });
+        }
         const hashedPassword =
             await bcrypt.hash(password, 10);
 
@@ -20,7 +23,7 @@ async function registerUser(req, res) {
 
         await user.create(newUser)
             .then((dbUser) => {
-                res.status(200).send('Registered successfully');
+                res.status(200).json(dbUser);
             }).catch((err) => {
                 console.log("Error creating user", err);
                 res.status(400).send({ text: "Error creating user" });
@@ -44,9 +47,11 @@ async function loginUser(req, res) {
     if (!dbUser) {
         return res.status(401).send({ text: "Invalid email" });
     }
-
+    console.log("DB User:", dbUser);
+    console.log("Password:", password);
+    console.log("DB User Password:", dbUser.password);
     const isPasswordValid = bcrypt.compareSync(password, dbUser.password);
-
+    console.log("Is password valid:", isPasswordValid);
     if (!isPasswordValid) {
         return res.status(401).send({ text: "Invalid password" });
     }
